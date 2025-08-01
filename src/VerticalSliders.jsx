@@ -9,7 +9,7 @@ function VerticalSlider({ images, slideHeightRatio, widthRatio, springConfig}) {
     y: 0,
     config: springConfig
   }))
-
+  
   useEffect(() => {
     const h = containerRef.current?.scrollHeight || 0
     const vh = window.innerHeight
