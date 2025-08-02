@@ -11,15 +11,42 @@ function VerticalSlider({ images, slideHeightRatio, widthRatio, springConfig}) {
   }))
   
   useEffect(() => {
-    const h = containerRef.current?.scrollHeight || 0
-    const vh = window.innerHeight
-    maxScroll.current = Math.max(0, h - vh)
+    const container = containerRef.current
+    if (!container) return
+
+    const imagesInContainer = container.querySelectorAll('img')
+    let loadedCount = 0
+
+    const checkAllImagesLoaded = () => {
+      const h = container.scrollHeight || 0
+      const vh = window.innerHeight
+      maxScroll.current = Math.max(0, h - vh)
+    }
+
+    imagesInContainer.forEach(img => {
+      if (img.complete) {
+        loadedCount++
+        if (loadedCount === imagesInContainer.length) checkAllImagesLoaded()
+      } else {
+        img.addEventListener('load', () => {
+          loadedCount++
+          if (loadedCount === imagesInContainer.length) checkAllImagesLoaded()
+        })
+      }
+    })
+
+    // fallback: if no images found
+    if (imagesInContainer.length === 0) {
+      checkAllImagesLoaded()
+    }
   }, [images])
+
 
   useEffect(() => {
     const onWheel = e => {
       const currentY = springStyles.y.get() || 0
-      let nextY = currentY + e.deltaY
+      const SCROLL_SPEED = 3.5 // or try 3, 4, etc.
+      let nextY = currentY + e.deltaY * SCROLL_SPEED
       nextY = Math.max(0, Math.min(nextY, maxScroll.current))
       api.start({ y: nextY })
     }
@@ -53,7 +80,7 @@ function VerticalSlider({ images, slideHeightRatio, widthRatio, springConfig}) {
               height: slideHeightRatio
                 ? `${slideHeightRatio * 100}vh`
                 : 'auto',
-              marginBottom: '1rem'
+              marginBottom: '2.5em'
             }}
           >
             <img
