@@ -1,53 +1,69 @@
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useCallback } from 'react'
 import { useSpring, animated } from 'react-spring'
+import { useNavigate } from 'react-router-dom'
 
-function VerticalSlider({ images, slideHeightRatio, widthRatio, springConfig}) {
+/**
+ * @param {Object[]} images            – array of { id: string|number, src: string }
+ * @param {number}   slideHeightRatio  – e.g. 0.75 for 75vh slides
+ * @param {number}   widthRatio        – e.g. 0.8 for 80vw container
+ * @param {Object}   springConfig      – react-spring config
+ */
+function VerticalSlider({
+  images,
+  slideHeightRatio = 0.75,
+  widthRatio = 1,
+  springConfig = { tension: 170, friction: 26 }
+}) {
   const containerRef = useRef(null)
   const maxScroll = useRef(0)
+  const navigate = useNavigate()
 
+  // spring for translateY
   const [springStyles, api] = useSpring(() => ({
     y: 0,
     config: springConfig
   }))
-  
+
+  // calculate maxScroll once all imgs have loaded
   useEffect(() => {
     const container = containerRef.current
     if (!container) return
 
-    const imagesInContainer = container.querySelectorAll('img')
-    let loadedCount = 0
+    const imgs = container.querySelectorAll('img')
+    let loaded = 0
 
-    const checkAllImagesLoaded = () => {
-      const h = container.scrollHeight || 0
-      const vh = window.innerHeight
-      maxScroll.current = Math.max(0, h - vh)
+    const updateMax = () => {
+      const totalHeight = container.scrollHeight
+      const viewportH = window.innerHeight
+      maxScroll.current = Math.max(0, totalHeight - viewportH)
     }
 
-    imagesInContainer.forEach(img => {
+    if (imgs.length === 0) {
+      updateMax()
+      return
+    }
+
+    imgs.forEach(img => {
       if (img.complete) {
-        loadedCount++
-        if (loadedCount === imagesInContainer.length) checkAllImagesLoaded()
+        loaded++
+        if (loaded === imgs.length) updateMax()
       } else {
         img.addEventListener('load', () => {
-          loadedCount++
-          if (loadedCount === imagesInContainer.length) checkAllImagesLoaded()
-        })
+          loaded++
+          if (loaded === imgs.length) updateMax()
+        }, { once: true })
       }
     })
-
-    // fallback: if no images found
-    if (imagesInContainer.length === 0) {
-      checkAllImagesLoaded()
-    }
   }, [images])
 
-
+  // wheel → animate scroll
   useEffect(() => {
     const onWheel = e => {
-      const currentY = springStyles.y.get() || 0
-      const SCROLL_SPEED = 3.5 // or try 3, 4, etc.
-      let nextY = currentY + e.deltaY * SCROLL_SPEED
-      nextY = Math.max(0, Math.min(nextY, maxScroll.current))
+      const currentY = springStyles.y.get()
+      const nextY = Math.max(
+        0,
+        Math.min(currentY + e.deltaY * 3.5, maxScroll.current)
+      )
       api.start({ y: nextY })
     }
 
@@ -55,6 +71,13 @@ function VerticalSlider({ images, slideHeightRatio, widthRatio, springConfig}) {
     return () => window.removeEventListener('wheel', onWheel)
   }, [api, springStyles.y])
 
+  // click handler
+  const handleClick = useCallback(
+    id => {
+      navigate(`/project/${id}`)
+    },
+    [navigate]
+  )
 
   return (
     <div
@@ -72,10 +95,12 @@ function VerticalSlider({ images, slideHeightRatio, widthRatio, springConfig}) {
           transform: springStyles.y.to(y => `translateY(${-y}px)`)
         }}
       >
-        {images.map((src, idx) => (
+        {images.map(({ id, src }, idx) => (
           <div
-            key={idx}
+            key={id}
+            onClick={() => handleClick(id)}
             style={{
+              cursor: 'pointer',
               width: '100%',
               height: slideHeightRatio
                 ? `${slideHeightRatio * 100}vh`

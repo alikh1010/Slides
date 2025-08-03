@@ -1,36 +1,25 @@
-import { useState } from 'react'
-import VerticalSlider from './VerticalSliders'
-import PostImages from './PostImages'
+// App.jsx
+import React from 'react'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import Home from './Home'
+import PostPage from './PostPage'
 
-function App() {
-  const [imageUrls, setImageUrls] = useState([])
-
-  const firstSlider   = { tension: 50, friction: 30 }
-  const secondSlider  = { tension: 75, friction: 35 }
-  const thirdSlider   = { tension: 125, friction: 40 }
-  const forthSlider   = { tension: 250, friction: 45 }
+export default function App() {
+  const WP_API = ''
 
   return (
-    <div style={{ width: '100vw' }}>
-      <PostImages wordpressApiUrl={''} count={25} onImagesReady={setImageUrls} />
-
-      {imageUrls.length > 0 && (
-        <div style={{
-          display: 'flex',
-          gap: '2.5em',
-          justifyContent: 'center',
-          alignItems: 'flex-start',
-          maxWidth: '90vw',
-          margin: 'auto'
-        }}>
-          <VerticalSlider images={imageUrls} widthRatio={5 / 14} springConfig={firstSlider} />
-          <VerticalSlider images={imageUrls} widthRatio={3 / 14} springConfig={secondSlider} />
-          <VerticalSlider images={imageUrls} widthRatio={3 / 14} springConfig={thirdSlider} />
-          <VerticalSlider images={imageUrls} widthRatio={3 / 14} springConfig={forthSlider} />
-        </div>
-      )}
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route
+          index
+          element={<Home wordpressApiUrl={WP_API} count={25} />}
+        />
+        {/* match the same “/image/:id” path that your slider links to */}
+        <Route
+          path="/project/:id"
+          element={<PostPage wordpressApiUrl={WP_API} />}
+        />
+      </Routes>
+    </BrowserRouter>
   )
 }
-
-export default App
