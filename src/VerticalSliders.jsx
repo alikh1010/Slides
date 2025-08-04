@@ -2,12 +2,6 @@ import { useRef, useEffect, useCallback } from 'react'
 import { useSpring, animated } from 'react-spring'
 import { useNavigate } from 'react-router-dom'
 
-/**
- * @param {Object[]} images            – array of { id: string|number, src: string }
- * @param {number}   slideHeightRatio  – e.g. 0.75 for 75vh slides
- * @param {number}   widthRatio        – e.g. 0.8 for 80vw container
- * @param {Object}   springConfig      – react-spring config
- */
 function VerticalSlider({
   images,
   slideHeightRatio = 0.75,

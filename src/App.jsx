@@ -1,5 +1,3 @@
-// App.jsx
-import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Home from './Home'
 import PostPage from './PostPage'
@@ -10,15 +8,8 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route
-          index
-          element={<Home wordpressApiUrl={WP_API} count={25} />}
-        />
-        {/* match the same “/image/:id” path that your slider links to */}
-        <Route
-          path="/project/:id"
-          element={<PostPage wordpressApiUrl={WP_API} />}
-        />
+        <Route index element={<Home wordpressApiUrl={WP_API} count={25} />}/>
+        <Route path="/project/:id" element={<PostPage wordpressApiUrl={WP_API} />}/>
       </Routes>
     </BrowserRouter>
   )
