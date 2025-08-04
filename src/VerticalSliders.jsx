@@ -86,6 +86,7 @@ function VerticalSlider({
         ref={containerRef}
         style={{
           willChange: 'transform',
+          paddingTop: '35vh',
           transform: springStyles.y.to(y => `translateY(${-y}px)`)
         }}
       >
@@ -109,6 +110,7 @@ function VerticalSlider({
             />
           </div>
         ))}
+        <div style={{ height: '35vh', width: '100%' }} />
       </animated.div>
     </div>
   )
