@@ -1,16 +1,33 @@
+import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Home from './Home'
 import PostPage from './PostPage'
+import TopNavigation from './TopNavigation'
 
 export default function App() {
   const WP_API = ''
+  const navLinks = [
+    { to: '/', label: 'Projects' },
+    { to: '/notes', label: 'Notes' },
+    { to: '/about', label: 'About' },
+    { to: '/contact', label: 'Contact' }
+  ]
 
   return (
     <BrowserRouter>
-      <Routes>
-        <Route index element={<Home wordpressApiUrl={WP_API} count={25} />}/>
-        <Route path="/project/:id" element={<PostPage wordpressApiUrl={WP_API} />}/>
-      </Routes>
+      <TopNavigation links={navLinks} />
+      <div>
+        <Routes>
+          <Route
+            index
+            element={<Home wordpressApiUrl={WP_API} count={25} />}
+          />
+          <Route
+            path="/project/:id"
+            element={<PostPage wordpressApiUrl={WP_API} />}
+          />
+        </Routes>
+      </div>
     </BrowserRouter>
   )
 }

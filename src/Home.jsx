@@ -44,7 +44,6 @@ export default function Home({ wordpressApiUrl, count = 25 }) {
             <VerticalSlider
               key={index}
               images={slides}
-              slideHeightRatio={0.75}
               widthRatio={widthRatio}
               springConfig={springConfig}
             />
