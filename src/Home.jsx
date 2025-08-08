@@ -2,12 +2,6 @@ import { useState } from 'react'
 import PostImages from './PostImages'
 import VerticalSlider from './VerticalSliders'
 
-/**
- * Home page: fetches post images and displays multiple synchronized sliders.
- *
- * @param {string} wordpressApiUrl  Base URL of your WordPress site (e.g. "https://example.com").
- * @param {number} count            Number of posts to fetch.
- */
 export default function Home({ wordpressApiUrl, count = 25 }) {
   const [slides, setSlides] = useState([])
 

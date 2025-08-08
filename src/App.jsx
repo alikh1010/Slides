@@ -1,10 +1,11 @@
-import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Home from './Home'
 import PostPage from './PostPage'
 import TopNavigation from './TopNavigation'
+import Cursor from './TinyCursor'
 
 export default function App() {
+  // const WP_API = 'https://kdesigns.ir'
   const WP_API = ''
   const navLinks = [
     { to: '/', label: 'Projects' },
@@ -14,20 +15,23 @@ export default function App() {
   ]
 
   return (
-    <BrowserRouter>
-      <TopNavigation links={navLinks} />
-      <div>
-        <Routes>
-          <Route
-            index
-            element={<Home wordpressApiUrl={WP_API} count={25} />}
-          />
-          <Route
-            path="/project/:id"
-            element={<PostPage wordpressApiUrl={WP_API} />}
-          />
-        </Routes>
-      </div>
-    </BrowserRouter>
+    <>
+      <Cursor />
+      <BrowserRouter>
+        <TopNavigation links={navLinks} />
+        <div>
+          <Routes>
+            <Route
+              index
+              element={<Home wordpressApiUrl={WP_API} count={25} />}
+            />
+            <Route
+              path="/project/:id"
+              element={<PostPage wordpressApiUrl={WP_API} />}
+            />
+          </Routes>
+        </div>
+      </BrowserRouter>
+    </>
   )
 }
