@@ -1,51 +1,61 @@
-// TopNavigation.jsx
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import './TopNavigation.css'
 
-export default function TopNavigation({ links = [] }) {
+export default function TopNavigation({ links = [], logo }) {
   const [hidden, setHidden] = useState(false)
-  const lastY = useRef(window.scrollY)
   const { pathname } = useLocation()
 
   useEffect(() => {
-    let ticking = false
+    let lastDeltaY = 0
 
-    const handleScroll = () => {
-      const currentY = window.scrollY
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          // hide when scrolling down past 50px, show when scrolling up
-          if (currentY > lastY.current && currentY > 50) {
-            setHidden(true)
-          } else {
-            setHidden(false)
-          }
-          lastY.current = currentY
-          ticking = false
-        })
-        ticking = true
+    const handleWheel = (e) => {
+      const deltaY = e.deltaY
+
+      // Only react to intentional scroll movements
+      if (deltaY > 0 && lastDeltaY <= 0) {
+        // scrolling down
+        setHidden(true)
+      } else if (deltaY < 0 && lastDeltaY >= 0) {
+        // scrolling up
+        setHidden(false)
       }
+      lastDeltaY = deltaY
     }
 
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
+    window.addEventListener('wheel', handleWheel, { passive: true })
+    return () => window.removeEventListener('wheel', handleWheel)
   }, [])
 
   return (
     <nav className={`top-nav ${hidden ? 'top-nav--hidden' : ''}`}>
-      <ul className="top-nav__list">
-        {links.map(({ to, label }) => (
-          <li key={to} className="top-nav__item">
-            <Link
-              to={to}
-              className={`top-nav__link${pathname === to ? ' top-nav__link--active' : ''}`}
-            >
-              {label}
-            </Link>
-          </li>
-        ))}
-      </ul>
+      <div className="top-nav__inner">
+
+        {/* Left side logo */}
+        <div className="top-nav__logo"  style={{
+              height: '100%', width: '3em', float: 'left'
+            }} >
+          {typeof logo === 'string' ? (
+            <img src={logo} alt="Logo" style={{width: '100%'}}/>
+          ) : (
+            logo
+          )}
+        </div>
+
+        {/* Right side links */}
+        <ul className="top-nav__list" style={{float: 'right'}}>
+          {links.map(({ to, label }) => (
+            <li key={to} className="top-nav__item">
+              <Link
+                to={to}
+                className={`top-nav__link${pathname === to ? ' top-nav__link--active' : ''}`}
+              >
+                {label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
     </nav>
   )
 }

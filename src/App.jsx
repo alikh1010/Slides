@@ -18,17 +18,11 @@ export default function App() {
     <>
       <Cursor />
       <BrowserRouter>
-        <TopNavigation links={navLinks} />
+        <TopNavigation links={navLinks} logo={'./public/AhmadYounLogo.png'} />
         <div>
           <Routes>
-            <Route
-              index
-              element={<Home wordpressApiUrl={WP_API} count={25} />}
-            />
-            <Route
-              path="/project/:id"
-              element={<PostPage wordpressApiUrl={WP_API} />}
-            />
+            <Route index element={<Home wordpressApiUrl={WP_API} count={25} />} />
+            <Route path="/project/:id" element={<PostPage wordpressApiUrl={WP_API} />} />
           </Routes>
         </div>
       </BrowserRouter>

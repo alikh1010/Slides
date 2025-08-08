@@ -1,22 +1,39 @@
 .top-nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4rem;
-  background: #fff;
-  display: flex;
-  align-items: center;
-  padding: 0 1rem;
-  z-index: 1000;
-
-  /* key bit: animate transform */
-  transition: transform 0.25s ease-out;
-  will-change: transform;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4rem;
+    background: #fff;
+    display: block;
+    align-items: center;
+    padding-left: 5%;
+    padding-right: 5%;
+    z-index: 1000;
+    transition: transform 0.25s ease-out;
+    will-change: transform;
+    width: 90%;
 }
 
 .top-nav--hidden {
   transform: translateY(-100%);
+}
+
+.top-nav__logo {
+    height: 100%;
+    width: 3em;
+    float: left;
+    position: absolute;
+    align-content: center;
+}
+
+.top-nav__inner {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: 100%;
+  width: 100%;
 }
 
 .top-nav__list {
