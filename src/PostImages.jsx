@@ -8,11 +8,12 @@ function PostImages({ wordpressApiUrl, count = 25, onImagesReady }) {
 
   useEffect(() => {
     const fetchImages = async () => {
+
       // 1. No WP URL? → dummy array
       if (!wordpressApiUrl) {
         const dummy = Array.from({ length: count }, (_, i) => ({
           id: makeId(),
-          src: `https://placehold.co/400x600/000000/FFFFFF?text=Slide+${i + 1}`
+          src: `https://placehold.co/400x600/000000/FFFFFF?text=Image+${i + 1}`
         }))
         setImages(dummy)
         onImagesReady(dummy)
@@ -47,6 +48,7 @@ function PostImages({ wordpressApiUrl, count = 25, onImagesReady }) {
           id: makeId(),
           src: `https://placehold.co/400x600/000000/FFFFFF?text=Slide+${i + 1}`
         }))
+        
         setImages(dummy)
         onImagesReady(dummy)
       }

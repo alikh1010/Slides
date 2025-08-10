@@ -18,7 +18,7 @@ export default function App() {
     <>
       <Cursor />
       <BrowserRouter>
-        <TopNavigation links={navLinks} logo={'./public/AhmadYounLogo.png'} />
+        <TopNavigation links={navLinks} logo={'./AhmadYounLogo.png'} />
         <div>
           <Routes>
             <Route index element={<Home wordpressApiUrl={WP_API} count={25} />} />
